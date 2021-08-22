@@ -88,40 +88,86 @@ var displayQuestion = function() {
 }
 
 var checkAnswer = function(targetEl) {
-    answerNum = parseInt(targetEl.id);
-    
-    if (answerNum === questions[questionNumber].correct) {
-        
-        // clears screen for next question
-        var clearScreen = document.querySelector(".game-display");
-        clearScreen.remove();
 
-        // Proceeds to the next question and displays it
+    // changes id of selected answer button to integer so it can check if correct
+    answerNum = parseInt(targetEl.id);
+
+    // clear screen for the next question or end screen
+    var clearScreen = document.querySelector(".game-display");
+    clearScreen.remove();
+    
+    // if the answer is correct
+    if (answerNum === questions[questionNumber].correct) {
+        // if all questions are answered, stops timer and call end screen
         if (questionNumber === questions.length-1) {
-            console.log("Call end screen");
+            questionNumber++;
+            endScreen();
         }
+        // calls end screen if time is up
+        else if (gameTime === 0) {
+            endScreen();
+        }
+        // displays next question
         else {
             questionNumber++;
             displayQuestion();
         }
     }
+    // if the answer is incorrect
     else {
-
-        // clears screen for next question
-        var clearScreen = document.querySelector(".game-display");
-        clearScreen.remove();
-
-        // Proceeds to the next question and displays it and subtracts time for wrong answer
+        // subtracts 15 seconds or sets gameTime to 0 if out of time
         gameTime = Math.max(0, gameTime - 15)
         timerEl.textContent = gameTime;
+
+        // if all questions are answered, stops timer and call end screen
         if (questionNumber === questions.length-1) {
-            console.log("Call end screen");
+            questionNumber++;
+            endScreen();
         }
+        // call end screen if time is up
+        else if (gameTime === 0) {
+            endScreen();
+        }
+        // displays next question
         else {
             questionNumber++;
             displayQuestion();
         }
     }
+}
+
+var endScreen = function() {
+    var mainScreen = document.querySelector(".main-screen");
+
+    // creates elements
+    var displayEl = document.createElement("div");
+    var endInputEl = document.createElement("div");
+    var questionEl = document.createElement("h1");
+    var endText = document.createElement("p");
+    var endLabel = document.createElement("label");
+    var endInput = document.createElement("input");
+    var submitScore = document.createElement("button");
+
+    // set element attributes
+    displayEl.className = "game-display";
+    endInputEl.className = "input-form";
+    questionEl.innerText = "All done!";
+    endText.innerText = "Your final score is " + gameTime + ".";
+    endLabel.setAttribute("for", "initials");
+    endLabel.innerText = "Enter initials:";
+    endInput.setAttribute("type", "text");
+    endInput.setAttribute("id", "initials");
+    endInput.setAttribute("name", "initials");
+    submitScore.innerText = "Submit";
+
+    // appends elements to the main display div
+    mainScreen.appendChild(displayEl);
+    displayEl.appendChild(questionEl);
+    displayEl.appendChild(endText);
+    displayEl.appendChild(endInputEl);
+    endInputEl.appendChild(endLabel);
+    endInputEl.appendChild(endInput);
+    endInputEl.appendChild(submitScore);
 }
 
 pageContentEl.addEventListener("click", eventDelegator);

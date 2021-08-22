@@ -31,6 +31,15 @@ header p a {
     margin-bottom: 15px;
 }
 
+.input-form label, .input-form input{
+    margin-right: 15px;
+    font-size: x-large;
+}
+
+.input-form button {
+    width: auto;
+}
+
 section button {
     background-color: #351c75;
     border: none;
