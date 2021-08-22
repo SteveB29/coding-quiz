@@ -98,6 +98,8 @@ var checkAnswer = function(targetEl) {
     
     // if the answer is correct
     if (answerNum === questions[questionNumber].correct) {
+        var answerCorrect = true;
+        answerNotification(answerCorrect);
         // if all questions are answered, stops timer and call end screen
         if (questionNumber === questions.length-1) {
             questionNumber++;
@@ -118,6 +120,9 @@ var checkAnswer = function(targetEl) {
         // subtracts 15 seconds or sets gameTime to 0 if out of time
         gameTime = Math.max(0, gameTime - 15)
         timerEl.textContent = gameTime;
+
+        var answerCorrect = false;
+        answerNotification(answerCorrect);
 
         // if all questions are answered, stops timer and call end screen
         if (questionNumber === questions.length-1) {
@@ -168,6 +173,37 @@ var endScreen = function() {
     endInputEl.appendChild(endLabel);
     endInputEl.appendChild(endInput);
     endInputEl.appendChild(submitScore);
+
+    // submit press store to localStorage
+
+}
+
+var answerNotification = function(answerCorrect) {
+    answerText = "";
+    if (answerCorrect) {
+        answerText = "Correct!";
+    }
+    else {
+        answerText = "Wrong!"
+    }
+
+    var wholePAge = document.querySelector("body");
+
+    var displayNotificationEl = document.createElement("footer");
+    var correctOrWrong = document.createElement("h2");
+
+    correctOrWrong.innerText = answerText
+
+    wholePAge.appendChild(displayNotificationEl);
+    displayNotificationEl.appendChild(correctOrWrong);
+
+    var clearAnswerNotification = function () {
+        var clearFooter = document.querySelector("footer");
+        clearFooter.remove();
+    }
+
+    setTimeout(clearAnswerNotification, 800);
+
 }
 
 pageContentEl.addEventListener("click", eventDelegator);

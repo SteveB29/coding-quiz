@@ -54,3 +54,12 @@ section button {
 section button:hover {
     background-color: #bd60e7;
 }
+
+footer {
+    color: lightgray;
+    font-style: italic;
+    font-size: 24px;
+    margin: 0 auto;
+    width: 50%;
+    border-top: 5px solid lightgray;
+}
