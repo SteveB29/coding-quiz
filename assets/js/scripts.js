@@ -1,4 +1,6 @@
-var startButton = document.querySelector(".button");
+var pageContentEl = document.querySelector("#main-screen")
+var timerEl = document.getElementById("timer");
+var gameTime = 75;
 var questionNumber = 0;
 var questions = [
     {
@@ -25,9 +27,37 @@ var questions = [
 ];
 
 
+var eventDelegator = function(event) {
+    var targetEl = event.target;
+    if (targetEl.matches("#start-button")) {
+        // clears starter screen text
+        var clearIntro = document.querySelector(".starter-display");
+        clearIntro.remove();
+
+        // starts the game
+        startGame();
+    }
+    else if (targetEl.matches(".game-button")) {
+        console.log("This works");
+    }
+    console.log(targetEl);
+}
+
 var startGame = function() {
-    var clearIntro = document.querySelector(".starter-display");
-    clearIntro.remove();
+    
+    // starts the game timer
+    gameTime--;
+    var gameTimer = setInterval(function() {
+        if (gameTime > 0){
+            timerEl.textContent = gameTime;
+            gameTime--;
+        }
+        else{
+            timerEl.textContent = gameTime;
+            clearInterval(gameTimer);
+        }
+    }, 1000);
+
     displayQuestion();
 }
 
@@ -40,6 +70,7 @@ var displayQuestion = function() {
 
     // set element attributes
     displayEl.className = "game-display";
+    displayEl.setAttribute("id", "game-display");
     questionEl.innerText = questions[questionNumber].question;
 
     // appends elements to the main display div
@@ -48,11 +79,11 @@ var displayQuestion = function() {
 
     for (var i = 0; i < questions[questionNumber].choices.length; i++) {
         var answerButtonEl = document.createElement("button");
-        answerButtonEl.className = "button";
+        answerButtonEl.className = "game-button";
         answerButtonEl.setAttribute("id", i);
         answerButtonEl.innerText = (i+1) + ": " + questions[0].choices[i];
         displayEl.appendChild(answerButtonEl);
     }
-}
+};
 
-startButton.addEventListener("click", startGame);
+pageContentEl.addEventListener("click", eventDelegator);
