@@ -10,11 +10,25 @@ header p a {
     color: blue;
 }
 
-section {
+.starter-display {
     width: 50%;
     margin: 0 auto;
     text-align: center;
     font-size: x-large;
+}
+
+.game-display {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    margin: 0 auto;
+    font-size: x-large;
+}
+
+.game-display button {
+    width: 250px;
+    text-align: left;
+    margin-bottom: 15px;
 }
 
 section button {

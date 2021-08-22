@@ -1,4 +1,4 @@
-var startButton = document.querySelector("#start-button");
+var startButton = document.querySelector(".button");
 var questionNumber = 0;
 var questions = [
     {
@@ -37,19 +37,22 @@ var displayQuestion = function() {
     // creates elements
     var displayEl = document.createElement("div");
     var questionEl = document.createElement("h3");
-    var testEl = document.createElement("p")
 
     // set element attributes
-    displayEl.className = "starter-display";
+    displayEl.className = "game-display";
     questionEl.innerText = questions[questionNumber].question;
-    testEl.innerText = "This is a test";
 
     // appends elements to the main display div
     mainScreen.appendChild(displayEl);
     displayEl.appendChild(questionEl);
-    displayEl.appendChild(testEl);
 
-    console.log(questions[0].choices.length);
+    for (var i = 0; i < questions[questionNumber].choices.length; i++) {
+        var answerButtonEl = document.createElement("button");
+        answerButtonEl.className = "button";
+        answerButtonEl.setAttribute("id", i);
+        answerButtonEl.innerText = (i+1) + ": " + questions[0].choices[i];
+        displayEl.appendChild(answerButtonEl);
+    }
 }
 
 startButton.addEventListener("click", startGame);
