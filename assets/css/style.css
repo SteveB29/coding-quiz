@@ -1,0 +1,32 @@
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 15px;
+}
+
+header p a {
+    text-decoration: none;
+    color: blue;
+}
+
+section {
+    width: 50%;
+    margin: 0 auto;
+    text-align: center;
+}
+
+section button {
+    background-color: #351c75;
+    border: none;
+    color: white;
+    display: inline block;
+    padding: 15px 32px;
+    border-radius: 15px;
+    font-size: large;
+    text-align: center;
+}
+
+section button:hover {
+    background-color: #bd60e7;
+}
