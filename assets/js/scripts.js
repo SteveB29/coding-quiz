@@ -34,21 +34,24 @@ var eventDelegator = function(event) {
         var clearIntro = document.querySelector(".starter-display");
         clearIntro.remove();
 
-        // starts the game
-        startGame();
+        // starts the timer and game
+        startTimer();
+        displayQuestion();
     }
     else if (targetEl.matches(".game-button")) {
-        console.log("This works");
+        checkAnswer(targetEl);
     }
-    console.log(targetEl);
 }
 
-var startGame = function() {
+var startTimer = function() {
     
     // starts the game timer
     gameTime--;
     var gameTimer = setInterval(function() {
-        if (gameTime > 0){
+        if (questionNumber === questions.length) {
+            clearInterval(gameTimer);
+        }
+        else if (gameTime > 0){
             timerEl.textContent = gameTime;
             gameTime--;
         }
@@ -57,8 +60,6 @@ var startGame = function() {
             clearInterval(gameTimer);
         }
     }, 1000);
-
-    displayQuestion();
 }
 
 var displayQuestion = function() {
@@ -81,9 +82,46 @@ var displayQuestion = function() {
         var answerButtonEl = document.createElement("button");
         answerButtonEl.className = "game-button";
         answerButtonEl.setAttribute("id", i);
-        answerButtonEl.innerText = (i+1) + ": " + questions[0].choices[i];
+        answerButtonEl.innerText = (i+1) + ": " + questions[questionNumber].choices[i];
         displayEl.appendChild(answerButtonEl);
     }
-};
+}
+
+var checkAnswer = function(targetEl) {
+    answerNum = parseInt(targetEl.id);
+    
+    if (answerNum === questions[questionNumber].correct) {
+        
+        // clears screen for next question
+        var clearScreen = document.querySelector(".game-display");
+        clearScreen.remove();
+
+        // Proceeds to the next question and displays it
+        if (questionNumber === questions.length-1) {
+            console.log("Call end screen");
+        }
+        else {
+            questionNumber++;
+            displayQuestion();
+        }
+    }
+    else {
+
+        // clears screen for next question
+        var clearScreen = document.querySelector(".game-display");
+        clearScreen.remove();
+
+        // Proceeds to the next question and displays it and subtracts time for wrong answer
+        gameTime = Math.max(0, gameTime - 15)
+        timerEl.textContent = gameTime;
+        if (questionNumber === questions.length-1) {
+            console.log("Call end screen");
+        }
+        else {
+            questionNumber++;
+            displayQuestion();
+        }
+    }
+}
 
 pageContentEl.addEventListener("click", eventDelegator);
