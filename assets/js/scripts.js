@@ -41,6 +41,9 @@ var eventDelegator = function(event) {
     else if (targetEl.matches(".game-button")) {
         checkAnswer(targetEl);
     }
+    else if (targetEl.matches("#submit-score")) {
+        submitHighScores();
+    }
 }
 
 var startTimer = function() {
@@ -163,6 +166,8 @@ var endScreen = function() {
     endInput.setAttribute("type", "text");
     endInput.setAttribute("id", "initials");
     endInput.setAttribute("name", "initials");
+    endInput.setAttribute("maxlength", "3");
+    submitScore.setAttribute("id", "submit-score")
     submitScore.innerText = "Submit";
 
     // appends elements to the main display div
@@ -204,6 +209,34 @@ var answerNotification = function(answerCorrect) {
 
     setTimeout(clearAnswerNotification, 800);
 
+}
+
+var submitHighScores = function() {
+    var initials = document.querySelector("#initials").value;
+    if (!initials) {
+        alert("Please enter your initials in the text box");
+    }
+    else {
+        var highScoreObj = [
+            {
+            initials: initials,
+            score: gameTime
+            }
+        ];
+        var loadHighScore = localStorage.getItem("high-score")
+        if (!loadHighScore) {
+            localStorage.setItem("high-score", JSON.stringify(highScoreObj));
+            console.log("load high score page");
+            location.href="high-score.html"
+        }
+        else {
+            loadHighScore = JSON.parse(loadHighScore);
+            loadHighScore.push(highScoreObj);
+            localStorage.setItem("high-score", JSON.stringify(loadHighScore));
+            console.log("load high score page");
+            location.href="high-score.html"
+        }
+    }
 }
 
 pageContentEl.addEventListener("click", eventDelegator);
