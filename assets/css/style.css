@@ -83,3 +83,13 @@ footer {
     width: 50%;
     border-top: 5px solid lightgray;
 }
+
+@media screen and (max-width: 980px) {
+    .high-score-list ol {
+        width: 100%;
+    }
+
+    .game-display h1 {
+        width: 100%;
+    }
+}
