@@ -217,24 +217,24 @@ var submitHighScores = function() {
         alert("Please enter your initials in the text box");
     }
     else {
-        var highScoreObj = [
-            {
+        var highScoreObj = {
             initials: initials,
             score: gameTime
-            }
-        ];
+            };
         var loadHighScore = localStorage.getItem("high-score")
         if (!loadHighScore) {
-            localStorage.setItem("high-score", JSON.stringify(highScoreObj));
+            loadHighScore = [];
+            loadHighScore.push(highScoreObj);
+            localStorage.setItem("high-score", JSON.stringify(loadHighScore));
             console.log("load high score page");
-            location.href="high-score.html"
+            location.href="high-score.html";
         }
         else {
             loadHighScore = JSON.parse(loadHighScore);
             loadHighScore.push(highScoreObj);
             localStorage.setItem("high-score", JSON.stringify(loadHighScore));
             console.log("load high score page");
-            location.href="high-score.html"
+            location.href="high-score.html";
         }
     }
 }
