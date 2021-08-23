@@ -3,6 +3,7 @@ header {
     flex-direction: row;
     justify-content: space-between;
     margin: 15px;
+    font-size: larger;
 }
 
 header p a {

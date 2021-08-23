@@ -26,9 +26,11 @@ var questions = [
     }
 ];
 
-
+// used to call appropriate function based on button clicked
 var eventDelegator = function(event) {
     var targetEl = event.target;
+    
+    // starts the game when start button is clicked
     if (targetEl.matches("#start-button")) {
         // clears starter screen text
         var clearIntro = document.querySelector(".starter-display");
@@ -38,33 +40,39 @@ var eventDelegator = function(event) {
         startTimer();
         displayQuestion();
     }
+
+    // calls the checkAnswer function when an answer button is clicked
     else if (targetEl.matches(".game-button")) {
         checkAnswer(targetEl);
     }
+
+    // calls the submit high score function when submit score is clicked at the end of the game
     else if (targetEl.matches("#submit-score")) {
         submitHighScores();
     }
-}
+};
 
+// starts the game timer
 var startTimer = function() {
-    
-    // starts the game timer
-    gameTime--;
     var gameTimer = setInterval(function() {
+        // stops the timer if all questions have been asked
         if (questionNumber === questions.length) {
             clearInterval(gameTimer);
         }
+        // decrements the gametime if there is stil time left
         else if (gameTime > 0){
-            timerEl.textContent = gameTime;
             gameTime--;
+            timerEl.textContent = gameTime;
         }
+        // sets the time to zero and stops the timer when it reaches zero
         else{
             timerEl.textContent = gameTime;
             clearInterval(gameTimer);
         }
     }, 1000);
-}
+};
 
+// displays question on the page
 var displayQuestion = function() {
     var mainScreen = document.querySelector(".main-screen");
 
@@ -81,6 +89,7 @@ var displayQuestion = function() {
     mainScreen.appendChild(displayEl);
     displayEl.appendChild(questionEl);
 
+    // adds a button for each potential answer
     for (var i = 0; i < questions[questionNumber].choices.length; i++) {
         var answerButtonEl = document.createElement("button");
         answerButtonEl.className = "game-button";
@@ -88,11 +97,11 @@ var displayQuestion = function() {
         answerButtonEl.innerText = (i+1) + ": " + questions[questionNumber].choices[i];
         displayEl.appendChild(answerButtonEl);
     }
-}
+};
 
 var checkAnswer = function(targetEl) {
 
-    // changes id of selected answer button to integer so it can check if correct
+    // changes id of selected answer button to integer so can check if correct
     answerNum = parseInt(targetEl.id);
 
     // clear screen for the next question or end screen
@@ -101,8 +110,11 @@ var checkAnswer = function(targetEl) {
     
     // if the answer is correct
     if (answerNum === questions[questionNumber].correct) {
+        
+        // calls function to display "Correct!" at the bottom of the page
         var answerCorrect = true;
         answerNotification(answerCorrect);
+
         // if all questions are answered, stops timer and call end screen
         if (questionNumber === questions.length-1) {
             questionNumber++;
@@ -118,12 +130,14 @@ var checkAnswer = function(targetEl) {
             displayQuestion();
         }
     }
+
     // if the answer is incorrect
     else {
         // subtracts 15 seconds or sets gameTime to 0 if out of time
         gameTime = Math.max(0, gameTime - 15)
         timerEl.textContent = gameTime;
 
+        // calls function to display "Wrong!" at the bottom of the page
         var answerCorrect = false;
         answerNotification(answerCorrect);
 
@@ -142,8 +156,9 @@ var checkAnswer = function(targetEl) {
             displayQuestion();
         }
     }
-}
+};
 
+// generates the end screen
 var endScreen = function() {
     var mainScreen = document.querySelector(".main-screen");
 
@@ -179,12 +194,13 @@ var endScreen = function() {
     endInputEl.appendChild(endInput);
     endInputEl.appendChild(submitScore);
 
-    // submit press store to localStorage
+};
 
-}
-
+// displays "Correct!" or "Wrong!" based on if answer is correct
 var answerNotification = function(answerCorrect) {
-    answerText = "";
+    var answerText = "";
+    
+    // set answer text to appropriate value
     if (answerCorrect) {
         answerText = "Correct!";
     }
@@ -192,6 +208,7 @@ var answerNotification = function(answerCorrect) {
         answerText = "Wrong!"
     }
 
+    // displays correct or wrong at bottom of question
     var wholePAge = document.querySelector("body");
 
     var displayNotificationEl = document.createElement("footer");
@@ -207,36 +224,44 @@ var answerNotification = function(answerCorrect) {
         clearFooter.remove();
     }
 
+    // clears correct / wrong after 0.8 seconds
     setTimeout(clearAnswerNotification, 800);
 
-}
+};
 
+// enters the high score into localStorage when submit is clicked
 var submitHighScores = function() {
     var initials = document.querySelector("#initials").value;
+
+    // checks that something is enterd into the initials box
     if (!initials) {
         alert("Please enter your initials in the text box");
     }
+
+    // creates a high score object when initials are entered
     else {
         var highScoreObj = {
             initials: initials,
             score: gameTime
             };
         var loadHighScore = localStorage.getItem("high-score")
+
+        // if first highscore. creates new high score array and calls high score page
         if (!loadHighScore) {
             loadHighScore = [];
             loadHighScore.push(highScoreObj);
             localStorage.setItem("high-score", JSON.stringify(loadHighScore));
-            console.log("load high score page");
             location.href="high-score.html";
         }
+
+        // if not first high score, add current to localstorage array and call high score page
         else {
             loadHighScore = JSON.parse(loadHighScore);
             loadHighScore.push(highScoreObj);
             localStorage.setItem("high-score", JSON.stringify(loadHighScore));
-            console.log("load high score page");
             location.href="high-score.html";
         }
     }
-}
+};
 
 pageContentEl.addEventListener("click", eventDelegator);
